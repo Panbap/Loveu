@@ -4768,7 +4768,7 @@ function Fr({
     color: s
 }) {
     const n = M.useRef(),
-        r = mi(Ir, "/heart.obj"),
+        r = mi(Ir, "./assets/heart.obj"),
         o = 50 + Math.random() * 20,
         a = -40;
     return Je(l => {
