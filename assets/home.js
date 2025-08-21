@@ -6708,7 +6708,7 @@ function Hr({ color: e, messages: t, fontName: i }) {
             delay: Math.random() * 2,
             fontSize: f ? 1 : 1.2,
             color: e ?? "#EE66A6",
-            font: i ? `/font/${i}.ttf` : "font/OpenSans.ttf",
+            font: i ? `./${i}.ttf` : "./OpenSans.ttf",
           },
           `text-${l}-${d}`
         )
