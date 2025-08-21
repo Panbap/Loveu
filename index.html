@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Lovely</title>
+  <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+  <link rel="icon" href="https://github.com/Panbap/anh/blob/main/icon1.png?raw=true" type="image/png">
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+
+<body class="font-sans antialiased">
+  <div id="app"></div>
+
+  <script type="module" src="./assets/1.js"></script>
+  <script type="module" src="./assets/2.js"></script>
+
+  <script>
+    function base64Decode(str) {
+      try {
+        return decodeURIComponent(escape(atob(str)));
+      } catch {
+        return null;
+      }
+    }
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        data: params.get('data') || null
+      };
+    }
+
+    const { data: encodedData } = getQueryParams();
+
+    let rawMessage = 'Anh yêu em';
+    let rawMusic = './e.mp3';
+
+    if (encodedData) {
+      try {
+        const decodedJson = base64Decode(encodedData);
+        const parsed = JSON.parse(decodedJson);
+        rawMessage = parsed.message || rawMessage;
+        rawMusic = parsed.music || rawMusic;
+      } catch {
+        // Nếu lỗi, giữ nguyên mặc định
+      }
+    }
+
+    const messagesArray = rawMessage.split(',').map(item => item.trim());
+
+    const data = {
+      component: "views/home",
+      props: {
+        message: rawMessage,
+        client: {
+          id: 1,
+          fontName: "Mali",
+          color: "#EE66A6",
+          messages: messagesArray,
+          type_music: "system",
+          music: rawMusic,
+          image: [""]
+        },
+        clientId: "1"
+      },
+      url: "",
+      version: "1",
+      clearHistory: false,
+      encryptHistory: false
+    };
+
+    document.getElementById('app').setAttribute('data-page', JSON.stringify(data));
+  </script>
+
+</body>
+
+</html>
