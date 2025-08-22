@@ -108,32 +108,50 @@
             }, 500);
         });
 
-        let devtoolsDetected = false;
+        (function () {
+    let devtoolsDetected = false;
 
-        setInterval(() => {
-            const before = new Date().getTime();
-            // Function("debugger")();
-            eval("debugger")
-            const after = new Date().getTime();
+    function showWarning() {
+        if (!devtoolsDetected) {
+            devtoolsDetected = true;
+            document.body.innerHTML = `
+                <h1 style="color:red; font-size: 28px; text-align: center; margin-top: 100px;">Đang mở DevTools!</h1>
+                <h1 style="color:red; font-size: 24px; text-align: center;">Nhấn F12 để đóng.</h1>
+            `;
+        }
+    }
 
-            const isDevToolsOpen = after - before > 100;
+    function checkWindowSize() {
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
 
-            if (isDevToolsOpen && !devtoolsDetected) {
-                devtoolsDetected = true;
+        return widthDiff > threshold || heightDiff > threshold;
+    }
 
-                document.body.innerHTML = `
-                    <h1 style="color:red; font-size: 28px; text-align: center; margin-top: 100px;"> Đang mở DevTools!</h1>
-                    <h1 style="color:red; font-size: 24px; text-align: center;">Nhấn F12 để đóng.</h1>
-                    `;
-            }
+    function checkDebuggerDelay() {
+        const start = new Date().getTime();
+        eval("debugger");
+        const end = new Date().getTime();
 
-            if (!isDevToolsOpen && devtoolsDetected) {
-                location.reload();
-            }
-        }, 1000);
+        return end - start > 100;
+    }
+
+    function detectDevTools() {
+        if (checkWindowSize() || checkDebuggerDelay()) {
+            showWarning();
+        } else if (devtoolsDetected) {
+            // Nếu đã từng phát hiện mà giờ không còn mở DevTools -> reload
+            location.reload();
+        }
+    }
+
+    setInterval(detectDevTools, 1000);
+})();
     </script>
 
 </body>
 
 
 </html>
+
